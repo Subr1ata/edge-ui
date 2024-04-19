@@ -9,11 +9,25 @@ import { FaSquareGithub } from "react-icons/fa6";
 import { SiGooglemeet, SiLeetcode, SiFlipkart } from "react-icons/si";
 import { FaSnapchatGhost } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
-import { useReducer, useRef } from "react";
+import { MutableRefObject, useReducer, useRef } from "react";
 import { useFetch, useInfiniteScroll, useLazyLoading } from "./custom-hooks";
 
+interface StateType {
+  page: number;
+  // Add other properties if needed
+}
+
+interface ImgState {
+  images: { author: string; download_url: string }[];
+  fetching: boolean;
+}
+type ImgAction =
+  | { type: "STACK_IMAGES"; images: { author: string; download_url: string }[] }
+  | { type: "FETCHING_IMAGES"; fetching: boolean };
+
+// type ActionType = ImgState;
 function App() {
-  const imgReducer = (state, action) => {
+  const imgReducer = (state: ImgState, action: ImgAction): ImgState => {
     switch (action.type) {
       case "STACK_IMAGES":
         return { ...state, images: state.images.concat(action.images) };
@@ -24,7 +38,7 @@ function App() {
     }
   };
 
-  const pageReducer = (state, action) => {
+  const pageReducer = (state: StateType, action: { type: string }) => {
     switch (action.type) {
       case "ADVANCE_PAGE":
         return { ...state, page: state.page + 1 };
@@ -39,7 +53,8 @@ function App() {
     fetching: true,
   });
 
-  const bottomBoundaryRef = useRef(null);
+  const bottomBoundaryRef: MutableRefObject<HTMLDivElement | null> =
+    useRef(null);
   useFetch(pager, imgDispatch);
   useLazyLoading(".card-img-top", imgData.images);
   useInfiniteScroll(bottomBoundaryRef, pagerDispatch);
@@ -418,33 +433,28 @@ function App() {
         </div>
         */}
         <div className="rounded-xl grid grid-cols-2 md:grid-cols-4 gap-4 p-5">
-          {imgData.images.map(
-            (
-              image: { author: string; download_url: string },
-              index: number
-            ) => {
-              const { author, download_url } = image;
-              return (
-                <div key={index} className="card">
-                  <div className="card-body ">
-                    <img
-                      alt={author}
-                      data-src={download_url}
-                      className="card-img-top h-auto max-w-full rounded-lg"
-                      src={
-                        "https://picsum.photos/id/870/300/300?grayscale&blur=2"
-                      }
-                    />
-                  </div>
-                  <div className="card-footer">
-                    <p className="card-text text-center text-capitalize text-primary">
-                      Shot by: {author}
-                    </p>
-                  </div>
+          {imgData.images.map((image, index) => {
+            const { author, download_url } = image;
+            return (
+              <div key={index} className="card">
+                <div className="card-body ">
+                  <img
+                    alt={author}
+                    data-src={download_url}
+                    className="card-img-top h-auto max-w-full rounded-lg"
+                    src={
+                      "https://picsum.photos/id/870/300/300?grayscale&blur=2"
+                    }
+                  />
                 </div>
-              );
-            }
-          )}
+                <div className="card-footer">
+                  <p className="card-text text-center text-capitalize text-primary">
+                    Shot by: {author}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
           {/* {isLoading && <p>Loading...</p>} */}
         </div>
         {imgData.fetching && (
