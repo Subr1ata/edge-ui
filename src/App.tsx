@@ -11,6 +11,7 @@ import { FaSnapchatGhost } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { MutableRefObject, useReducer, useRef } from "react";
 import { useFetch, useInfiniteScroll, useLazyLoading } from "./custom-hooks";
+import { Link } from "react-router-dom";
 
 interface StateType {
   page: number;
@@ -437,20 +438,26 @@ function App() {
             const { author, download_url } = image;
             return (
               <div key={index} className="card">
-                <div className="card-body ">
+                <div className="card-body group relative w-full border border-teal-500 hover:border-2 h-[400px] overflow-hidden rounded-lg sm:w-[360px] transition-all">
                   <img
                     alt={author}
                     data-src={download_url}
-                    className="card-img-top h-auto max-w-full rounded-lg"
+                    className="card-img-top h-auto max-w-full rounded-lg w-full object-cover group-hover:h-[200px] transition-all duration-300 z-20"
                     src={
                       "https://picsum.photos/id/870/300/300?grayscale&blur=2"
                     }
                   />
-                </div>
-                <div className="card-footer">
-                  <p className="card-text text-center text-capitalize text-primary">
-                    Shot by: {author}
-                  </p>
+                  <Link
+                    to={`/post`}
+                    className="z-10 group-hover:bottom-0 absolute bottom-[-200px] left-0 right-0 border border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white transition-all duration-300 text-center py-2 rounded-md !rounded-tl-none m-2"
+                  >
+                    Read article
+                  </Link>
+                  <div className="card-footer">
+                    <p className="card-text text-center text-capitalize text-primary text-white font-bold mt-10">
+                      Shot by: {author}
+                    </p>
+                  </div>
                 </div>
               </div>
             );
