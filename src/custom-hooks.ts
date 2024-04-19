@@ -1,14 +1,15 @@
-import { useEffect, useCallback, useRef, MutableRefObject, Dispatch } from 'react';
-
-// Define ActionType
-type ActionType = { type: "STACK_IMAGES"; images: { author: string, download_url: string }[] } | { type: "FETCHING_IMAGES"; fetching: boolean };
+import { useEffect, useCallback, useRef, Dispatch, MutableRefObject } from 'react';
 
 interface DataType {
     page: number;
 }
+
+type ActionType = { type: "STACK_IMAGES"; images: { author: string, download_url: string }[] } | { type: "FETCHING_IMAGES"; fetching: boolean };
+
 interface DispatchType {
     type: string;
 }
+
 
 // make API calls and pass the returned data via dispatch
 export const useFetch = (data: DataType, dispatch: Dispatch<ActionType>) => {
@@ -71,42 +72,14 @@ export const useLazyLoading = (imgSelector: string, items: { author: string, dow
         })
         intObs.observe(node);
     }, []);
-    // const imgObserver = useCallback(node => {
-    //     const intObs = new IntersectionObserver(entries => {
-    //         entries.forEach(en => {
-    //             if (en.intersectionRatio > 0) {
-    //                 const currentImg = en.target;
-    //                 const newImgSrc = currentImg.dataset.src;
-
-    //                 // only swap out the image source if the new url exists
-    //                 if (!newImgSrc) {
-    //                     console.error('Image source is invalid');
-    //                 } else {
-    //                     currentImg.src = newImgSrc;
-    //                 }
-    //                 intObs.unobserve(node);
-    //             }
-    //         });
-    //     })
-    //     intObs.observe(node);
-    // }, []);
 
     const imagesRef: React.MutableRefObject<NodeListOf<HTMLImageElement> | null> = useRef(null);
 
     useEffect(() => {
-        const images = document.querySelectorAll<HTMLImageElement>(imgSelector);
+        imagesRef.current = document.querySelectorAll(imgSelector);
 
-        if (imagesRef.current !== null) {
-            imagesRef.current = images;
+        if (imagesRef.current) {
             imagesRef.current.forEach(img => imgObserver(img));
         }
-    }, [imgObserver, imagesRef, imgSelector, items]);
-
-    // useEffect(() => {
-    //     imagesRef.current = document.querySelectorAll(imgSelector);
-
-    //     if (imagesRef.current) {
-    //         (imagesRef.current as string[]).forEach((img: string) => imgObserver(img));
-    //     }
-    // }, [imgObserver, imagesRef, imgSelector, items])
+    }, [imgObserver, imagesRef, imgSelector, items])
 }
