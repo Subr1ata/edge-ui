@@ -1,7 +1,17 @@
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef, MutableRefObject, Dispatch } from 'react';
+
+// Define ActionType
+type ActionType = { type: "STACK_IMAGES"; images: { author: string, download_url: string }[] } | { type: "FETCHING_IMAGES"; fetching: boolean };
+
+interface DataType {
+    page: number;
+}
+interface DispatchType {
+    type: string;
+}
 
 // make API calls and pass the returned data via dispatch
-export const useFetch = (data, dispatch) => {
+export const useFetch = (data: DataType, dispatch: Dispatch<ActionType>) => {
     useEffect(() => {
         dispatch({ type: 'FETCHING_IMAGES', fetching: true })
         fetch(`https://picsum.photos/v2/list?page=${data.page}&limit=10`)
@@ -19,9 +29,9 @@ export const useFetch = (data, dispatch) => {
 }
 
 // infinite scrolling with intersection observer
-export const useInfiniteScroll = (scrollRef, dispatch) => {
+export const useInfiniteScroll = (scrollRef: MutableRefObject<Element | null>, dispatch: (action: DispatchType) => void) => {
     const scrollObserver = useCallback(
-        node => {
+        (node: Element) => {
             new IntersectionObserver(entries => {
                 entries.forEach(en => {
                     if (en.intersectionRatio > 0) {
@@ -41,12 +51,12 @@ export const useInfiniteScroll = (scrollRef, dispatch) => {
 }
 
 // lazy load images with intersection observer
-export const useLazyLoading = (imgSelector, items) => {
-    const imgObserver = useCallback(node => {
+export const useLazyLoading = (imgSelector: string, items: { author: string, download_url: string }[]) => {
+    const imgObserver = useCallback((node: HTMLImageElement) => {
         const intObs = new IntersectionObserver(entries => {
             entries.forEach(en => {
                 if (en.intersectionRatio > 0) {
-                    const currentImg = en.target;
+                    const currentImg = en.target as HTMLImageElement;
                     const newImgSrc = currentImg.dataset.src;
 
                     // only swap out the image source if the new url exists
@@ -61,14 +71,42 @@ export const useLazyLoading = (imgSelector, items) => {
         })
         intObs.observe(node);
     }, []);
+    // const imgObserver = useCallback(node => {
+    //     const intObs = new IntersectionObserver(entries => {
+    //         entries.forEach(en => {
+    //             if (en.intersectionRatio > 0) {
+    //                 const currentImg = en.target;
+    //                 const newImgSrc = currentImg.dataset.src;
 
-    const imagesRef = useRef(null);
+    //                 // only swap out the image source if the new url exists
+    //                 if (!newImgSrc) {
+    //                     console.error('Image source is invalid');
+    //                 } else {
+    //                     currentImg.src = newImgSrc;
+    //                 }
+    //                 intObs.unobserve(node);
+    //             }
+    //         });
+    //     })
+    //     intObs.observe(node);
+    // }, []);
+
+    const imagesRef: React.MutableRefObject<NodeListOf<HTMLImageElement> | null> = useRef(null);
 
     useEffect(() => {
-        imagesRef.current = document.querySelectorAll(imgSelector);
+        const images = document.querySelectorAll<HTMLImageElement>(imgSelector);
 
-        if (imagesRef.current) {
+        if (imagesRef.current !== null) {
+            imagesRef.current = images;
             imagesRef.current.forEach(img => imgObserver(img));
         }
-    }, [imgObserver, imagesRef, imgSelector, items])
+    }, [imgObserver, imagesRef, imgSelector, items]);
+
+    // useEffect(() => {
+    //     imagesRef.current = document.querySelectorAll(imgSelector);
+
+    //     if (imagesRef.current) {
+    //         (imagesRef.current as string[]).forEach((img: string) => imgObserver(img));
+    //     }
+    // }, [imgObserver, imagesRef, imgSelector, items])
 }
