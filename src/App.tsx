@@ -60,46 +60,6 @@ function App() {
   useLazyLoading(".card-img-top", imgData.images);
   useInfiniteScroll(bottomBoundaryRef, pagerDispatch);
 
-  // const [images, setImages] = useState<string[]>([]);
-  // const [isLoading, setIsLoading] = useState(false);
-
-  // useEffect(() => {
-  //   // Function to load initial images
-  //   loadImages();
-  // }, []);
-
-  // // Function to load more images
-  // const loadMoreImages = () => {
-  //   // Simulated API call or any other method to fetch more images
-  //   // Here, I'm simply adding more image URLs to the state
-  //   const moreImages = [
-  //     "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-12.jpg",
-  //     "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-13.jpg",
-  //     "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-14.jpg",
-  //   ];
-  //   setImages((prevImages) => [...prevImages, ...moreImages]);
-  // };
-
-  // // Function to load initial images
-  // const loadImages = () => {
-  //   // Simulated initial image loading
-  //   const initialImages = [
-  //     "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image.jpg",
-  //     "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-1.jpg",
-  //     "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-2.jpg",
-  //     "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-3.jpg",
-  //     "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-4.jpg",
-  //     "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-5.jpg",
-  //     "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-6.jpg",
-  //     "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-7.jpg",
-  //     "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-8.jpg",
-  //     "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-9.jpg",
-  //     "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-10.jpg",
-  //     "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-11.jpg",
-  //   ];
-  //   setImages(initialImages);
-  // };
-
   return (
     <div className="bg-[url('../public/bg.png')] bg-hero min-h-screen bg-hero bg-no-repeat bg-cover bg-center bg-fixed">
       {/* TOP Header */}
@@ -202,7 +162,7 @@ function App() {
       </div>
 
       {/* Recently Visited Sites */}
-      <div className="flex flex-row gap-5 p-5 content-center items-center justify-center">
+      <div className="flex flex-wrap gap-5 p-5 content-center items-center justify-center">
         <div className="flex flex-col items-center">
           <button
             type="button"
@@ -322,7 +282,7 @@ function App() {
             <span className="text-blue-500 font-bold text-sm">Discover</span>
             <span className="text-white font-bold text-sm">Following</span>
           </div>
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-wrap gap-2">
             <span className="text-white font-bold">News</span>
             <span className="text-white font-bold">Sports</span>
             <span className="text-white font-bold">Play</span>
@@ -337,103 +297,7 @@ function App() {
             </span>
           </div>
         </div>
-        {/* 
-        <div className="rounded-xl  grid grid-cols-2 md:grid-cols-4 gap-4 p-5">
-          <div className="grid gap-4">
-            <div>
-              <img
-                className="h-auto max-w-full rounded-lg"
-                src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image.jpg"
-                alt=""
-              />
-            </div>
-            <div>
-              <img
-                className="h-auto max-w-full rounded-lg"
-                src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-1.jpg"
-                alt=""
-              />
-            </div>
-            <div>
-              <img
-                className="h-auto max-w-full rounded-lg"
-                src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-2.jpg"
-                alt=""
-              />
-            </div>
-          </div>
-          <div className="grid gap-4">
-            <div>
-              <img
-                className="h-auto max-w-full rounded-lg"
-                src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-3.jpg"
-                alt=""
-              />
-            </div>
-            <div>
-              <img
-                className="h-auto max-w-full rounded-lg"
-                src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-4.jpg"
-                alt=""
-              />
-            </div>
-            <div>
-              <img
-                className="h-auto max-w-full rounded-lg"
-                src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-5.jpg"
-                alt=""
-              />
-            </div>
-          </div>
-          <div className="grid gap-4">
-            <div>
-              <img
-                className="h-auto max-w-full rounded-lg"
-                src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-6.jpg"
-                alt=""
-              />
-            </div>
-            <div>
-              <img
-                className="h-auto max-w-full rounded-lg"
-                src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-7.jpg"
-                alt=""
-              />
-            </div>
-            <div>
-              <img
-                className="h-auto max-w-full rounded-lg"
-                src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-8.jpg"
-                alt=""
-              />
-            </div>
-          </div>
-          <div className="grid gap-4">
-            <div>
-              <img
-                className="h-auto max-w-full rounded-lg"
-                src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-9.jpg"
-                alt=""
-              />
-            </div>
-            <div>
-              <img
-                className="h-auto max-w-full rounded-lg"
-                src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-10.jpg"
-                alt=""
-              />
-            </div>
-            <div>
-              <img
-                className="h-auto max-w-full rounded-lg"
-                src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-11.jpg"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-        */}
-        <div className="rounded-xl grid grid-cols-2 md:grid-cols-4 gap-4 p-5">
+        <div className="rounded-xl flex flex-wrap gap-10 justify-center p-5">
           {imgData.images.map((image, index) => {
             const { author, download_url } = image;
             return (
